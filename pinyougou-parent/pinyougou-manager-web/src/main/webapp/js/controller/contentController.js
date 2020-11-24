@@ -103,5 +103,7 @@ app.controller('contentController' ,function($scope,$controller,contentService,u
 		)
 	}
 
+	$scope.status = ['无效','有效']
+
 
 });

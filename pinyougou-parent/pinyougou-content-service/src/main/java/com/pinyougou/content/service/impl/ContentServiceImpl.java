@@ -22,7 +22,7 @@ public class ContentServiceImpl implements ContentService {
 
 	@Autowired
 	private TbContentMapper contentMapper;
-	
+
 	/**
 	 * 查询全部
 	 */
@@ -36,7 +36,7 @@ public class ContentServiceImpl implements ContentService {
 	 */
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);		
+		PageHelper.startPage(pageNum, pageSize);
 		Page<TbContent> page=   (Page<TbContent>) contentMapper.selectByExample(null);
 		return new PageResult(page.getTotal(), page.getResult());
 	}
@@ -46,18 +46,18 @@ public class ContentServiceImpl implements ContentService {
 	 */
 	@Override
 	public void add(TbContent content) {
-		contentMapper.insert(content);		
+		contentMapper.insert(content);
 	}
 
-	
+
 	/**
 	 * 修改
 	 */
 	@Override
 	public void update(TbContent content){
 		contentMapper.updateByPrimaryKey(content);
-	}	
-	
+	}
+
 	/**
 	 * 根据ID获取实体
 	 * @param id
@@ -75,18 +75,18 @@ public class ContentServiceImpl implements ContentService {
 	public void delete(Long[] ids) {
 		for(Long id:ids){
 			contentMapper.deleteByPrimaryKey(id);
-		}		
+		}
 	}
-	
-	
-		@Override
+
+
+	@Override
 	public PageResult findPage(TbContent content, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
-		
+
 		TbContentExample example=new TbContentExample();
 		Criteria criteria = example.createCriteria();
-		
-		if(content!=null){			
+
+		if(content!=null){
 						if(content.getTitle()!=null && content.getTitle().length()>0){
 				criteria.andTitleLike("%"+content.getTitle()+"%");
 			}
@@ -99,11 +99,23 @@ public class ContentServiceImpl implements ContentService {
 			if(content.getStatus()!=null && content.getStatus().length()>0){
 				criteria.andStatusLike("%"+content.getStatus()+"%");
 			}
-	
+
 		}
-		
-		Page<TbContent> page= (Page<TbContent>)contentMapper.selectByExample(example);		
+
+		Page<TbContent> page= (Page<TbContent>)contentMapper.selectByExample(example);
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
+	@Override
+	public List<TbContent> findByCategoryId(Long categoryId) {
+		TbContentExample example = new TbContentExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andCategoryIdEqualTo(categoryId);
+		criteria.andStatusEqualTo("1");
+		//排序
+		example.setOrderByClause("sort_order");
+		List<TbContent> list = contentMapper.selectByExample(example);
+		return list;
+	}
+
 }
