@@ -17,12 +17,12 @@ import entity.PageResult;
  * @author Administrator
  *
  */
-@Service
+@Service(timeout = 10000)
 public class ContentCategoryServiceImpl implements ContentCategoryService {
 
 	@Autowired
 	private TbContentCategoryMapper contentCategoryMapper;
-	
+
 	/**
 	 * 查询全部
 	 */
@@ -36,7 +36,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 	 */
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
-		PageHelper.startPage(pageNum, pageSize);		
+		PageHelper.startPage(pageNum, pageSize);
 		Page<TbContentCategory> page=   (Page<TbContentCategory>) contentCategoryMapper.selectByExample(null);
 		return new PageResult(page.getTotal(), page.getResult());
 	}
@@ -46,18 +46,18 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 	 */
 	@Override
 	public void add(TbContentCategory contentCategory) {
-		contentCategoryMapper.insert(contentCategory);		
+		contentCategoryMapper.insert(contentCategory);
 	}
 
-	
+
 	/**
 	 * 修改
 	 */
 	@Override
 	public void update(TbContentCategory contentCategory){
 		contentCategoryMapper.updateByPrimaryKey(contentCategory);
-	}	
-	
+	}
+
 	/**
 	 * 根据ID获取实体
 	 * @param id
@@ -75,26 +75,26 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 	public void delete(Long[] ids) {
 		for(Long id:ids){
 			contentCategoryMapper.deleteByPrimaryKey(id);
-		}		
+		}
 	}
-	
-	
+
+
 		@Override
 	public PageResult findPage(TbContentCategory contentCategory, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
-		
+
 		TbContentCategoryExample example=new TbContentCategoryExample();
 		Criteria criteria = example.createCriteria();
-		
-		if(contentCategory!=null){			
+
+		if(contentCategory!=null){
 						if(contentCategory.getName()!=null && contentCategory.getName().length()>0){
 				criteria.andNameLike("%"+contentCategory.getName()+"%");
 			}
-	
+
 		}
-		
-		Page<TbContentCategory> page= (Page<TbContentCategory>)contentCategoryMapper.selectByExample(example);		
+
+		Page<TbContentCategory> page= (Page<TbContentCategory>)contentCategoryMapper.selectByExample(example);
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
 }
