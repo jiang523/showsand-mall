@@ -7,3 +7,7 @@
 *.lst
 *.class
 *.iml
+*.ipr
+*.ims
+*.project
+*/target/*
