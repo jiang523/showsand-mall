@@ -1,7 +1,9 @@
 /.metadata/
+/.idea/
 /.recommenders/
 /RemoteSystemsTempFiles/
 /target/
+*.iws
 *.jar
 *.war
 *.lst
