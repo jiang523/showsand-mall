@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * @Author:jiangwc33446
  * @DATE:create in 19:22 2020/11/26
- * @Description:
+ * @Description: 商品搜索接口
  **/
 public interface ItemSearchService {
     /**
