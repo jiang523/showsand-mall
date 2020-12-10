@@ -46,7 +46,7 @@ public class ItemCatServiceImpl implements ItemCatService {
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
-		Page<TbItemCat> page=   (Page<TbItemCat>) itemCatMapper.selectByExample(null);
+		Page<TbItemCat> page= (Page<TbItemCat>) itemCatMapper.selectByExample(null);
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 

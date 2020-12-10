@@ -18,10 +18,11 @@ import java.util.Map;
 /**
  * @Author:jiangwc33446
  * @DATE:create in 19:25 2020/11/26
- * @Description:
+ * @Description: 商品搜索服务
  **/
 @Service(timeout = 5000)
 public class ItemSearchServiceImpl implements ItemSearchService {
+
     @Autowired
     private SolrTemplate solrTemplate;
 
@@ -37,10 +38,16 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         List<String> categoryList = searchCategoryList(searchMap);
 
         //查询品牌和规格
-        if (categoryList.size()>0) {
-            Map brandAndSpecMap = searchBrandAndSpecList(categoryList.get(0));
-            map.putAll(brandAndSpecMap);
+        String category = (String)searchMap.get("category");
+        if (!"".equals(category)){
+            map.putAll(searchBrandAndSpecList(category));
+        }else {
+            if (categoryList.size()>0) {
+                map.putAll(searchBrandAndSpecList(categoryList.get(0)));
+            }
         }
+
+
         map.put("categoryList",categoryList);
         return map;
     }
@@ -54,10 +61,41 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         //后缀
         options.setSimplePostfix("</em>");
         query.setHighlightOptions(options);
+
+        /** 关键字查询 */
         Criteria criteria = new Criteria("item_keywords").is(searchMap.get("keywords"));
         query.addCriteria(criteria);
-        HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);
 
+        /** 按照商品分类查询  **/
+        if (searchMap.get("category")!=null && !"".equals(searchMap.get("category"))){
+            FilterQuery filterQuery = new SimpleFilterQuery();
+            Criteria filterCriteria = new Criteria("item_category").is(searchMap.get("category"));
+            filterQuery.addCriteria(filterCriteria);
+            query.addFilterQuery(filterQuery);
+        }
+
+        /** 按照商品品牌查询  **/
+        if (searchMap.get("brand")!=null && !"".equals(searchMap.get("brand"))){
+            FilterQuery filterQuery = new SimpleFilterQuery();
+            Criteria filterCriteria = new Criteria("item_brand").is(searchMap.get("brand"));
+            filterQuery.addCriteria(filterCriteria);
+            query.addFilterQuery(filterQuery);
+        }
+
+        /** 按照规格过滤   **/
+        if (searchMap.get("spec")!=null){
+            Map<String,String> specMap = (Map<String,String>)searchMap.get("spec");
+            for (String key:specMap.keySet()){
+                FilterQuery filterQuery = new SimpleFilterQuery();
+                Criteria filterCriteria = new Criteria("item_spec_"+key).is(specMap.get(key));
+                filterQuery.addCriteria(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+        }
+
+
+        /****  获取高亮结果集  *********/
+        HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);
         //高亮入口集合
         List<HighlightEntry<TbItem>> entryList = page.getHighlighted();
         for (HighlightEntry entry:entryList){
