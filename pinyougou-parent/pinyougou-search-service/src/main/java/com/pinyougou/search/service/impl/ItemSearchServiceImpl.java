@@ -87,7 +87,6 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             Map<String,String> specMap = (Map<String,String>)searchMap.get("spec");
             for (String key:specMap.keySet()){
                 FilterQuery filterQuery = new SimpleFilterQuery();
-<<<<<<< HEAD
                 Criteria filterCriteria = new Criteria("item_spec_"+key).is(specMap.get(key));
                 filterQuery.addCriteria(filterCriteria);
                 query.addFilterQuery(filterQuery);
@@ -107,9 +106,6 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             if (!"*".equals(price[1])){
                 FilterQuery filterQuery = new SimpleFilterQuery();
                 Criteria filterCriteria = new Criteria("item_price").lessThanEqual(price[1]);
-=======
-                Criteria filterCriteria = new Criteria("item_spec"+key).is(specMap.get(key));
->>>>>>> 9f4d5f685e0677d293d2a4d20716459c67a902cc
                 filterQuery.addCriteria(filterCriteria);
                 query.addFilterQuery(filterQuery);
             }
