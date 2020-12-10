@@ -2,7 +2,7 @@ app.controller('searchController', function ($scope,searchService) {
 
 
     //定义搜索对象的结构
-    $scope.searchMap ={'keywords':'','category':'','brand':'','spec':{}}
+    $scope.searchMap ={'keywords':'','category':'','brand':'','spec':{},'price':''}
     $scope.search = function () {
         searchService.search($scope.searchMap).success(
             function (response) {
@@ -13,7 +13,7 @@ app.controller('searchController', function ($scope,searchService) {
 
     //添加搜索项
     $scope.addSearchItem = function (key,value) {
-        if (key == 'category' || key == 'brand'){
+        if (key == 'category' || key == 'brand' || key == 'price'){
             $scope.searchMap[key] = value;
         }else {
             $scope.searchMap.spec[key] = value;
@@ -22,7 +22,7 @@ app.controller('searchController', function ($scope,searchService) {
     }
 
     $scope.removeSearchItem = function (key) {
-        if (key == 'category' || key == 'brand'){
+        if (key == 'category' || key == 'brand' || 'price'){
             $scope.searchMap[key] = '';
         }else {
             delete $scope.searchMap.spec[key];

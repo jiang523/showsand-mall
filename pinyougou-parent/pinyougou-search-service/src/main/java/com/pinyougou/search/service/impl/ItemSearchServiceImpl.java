@@ -93,6 +93,24 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             }
         }
 
+        /** 按照价格过滤 **/
+        if (searchMap.get("price")!=null && !"".equals(searchMap.get("price"))){
+            String priceStr = (String)searchMap.get("price");
+            String[] price = priceStr.split("-");
+            if (!"0".equals(price[0])){
+                FilterQuery filterQuery = new SimpleFilterQuery();
+                Criteria filterCriteria = new Criteria("item_price").greaterThanEqual(price[0]);
+                filterQuery.addCriteria(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+            if (!"*".equals(price[1])){
+                FilterQuery filterQuery = new SimpleFilterQuery();
+                Criteria filterCriteria = new Criteria("item_price").lessThanEqual(price[1]);
+                filterQuery.addCriteria(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+        }
+
 
         /****  获取高亮结果集  *********/
         HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);
