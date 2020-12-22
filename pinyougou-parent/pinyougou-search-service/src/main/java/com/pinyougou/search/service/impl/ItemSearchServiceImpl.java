@@ -46,8 +46,6 @@ public class ItemSearchServiceImpl implements ItemSearchService {
                 map.putAll(searchBrandAndSpecList(categoryList.get(0)));
             }
         }
-
-
         map.put("categoryList",categoryList);
         return map;
     }
@@ -111,6 +109,20 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             }
         }
 
+        /**** 分页 *****/
+        Integer pageNo = (Integer)searchMap.get("pageNo");
+        if (pageNo == null){
+            pageNo = 1;
+        }
+        Integer pageSize = (Integer)searchMap.get("pageSize");
+        if (pageSize == null){
+            pageSize = 20;
+        }
+        //起始索引
+        query.setOffset((pageNo-1)*pageSize);
+        query.setRows(pageSize);
+
+
 
         /****  获取高亮结果集  *********/
         HighlightPage<TbItem> page = solrTemplate.queryForHighlightPage(query, TbItem.class);
@@ -125,6 +137,8 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             }
         }
         map.put("rows",page.getContent());
+        map.put("totalPages",page.getTotalPages());
+        map.put("total",page.getTotalElements());
         return map;
     }
 

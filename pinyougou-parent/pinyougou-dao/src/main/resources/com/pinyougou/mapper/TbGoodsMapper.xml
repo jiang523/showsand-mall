@@ -78,8 +78,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, seller_id, goods_name, default_item_id, audit_status, is_marketable, brand_id, 
-    caption, category1_id, category2_id, category3_id, small_pic, price, type_template_id, 
+    id, seller_id, goods_name, default_item_id, audit_status, is_marketable, brand_id,
+    caption, category1_id, category2_id, category3_id, small_pic, price, type_template_id,
     is_enable_spec, is_delete
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pinyougou.pojo.TbGoodsExample" >
@@ -97,7 +97,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from tb_goods
     where id = #{id,jdbcType=BIGINT}
@@ -116,17 +116,17 @@
  	<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
 		SELECT LAST_INSERT_ID() AS id
 	</selectKey>
-    insert into tb_goods (id, seller_id, goods_name, 
-      default_item_id, audit_status, is_marketable, 
-      brand_id, caption, category1_id, 
-      category2_id, category3_id, small_pic, 
-      price, type_template_id, is_enable_spec, 
+    insert into tb_goods (id, seller_id, goods_name,
+      default_item_id, audit_status, is_marketable,
+      brand_id, caption, category1_id,
+      category2_id, category3_id, small_pic,
+      price, type_template_id, is_enable_spec,
       is_delete)
-    values (#{id,jdbcType=BIGINT}, #{sellerId,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, 
-      #{defaultItemId,jdbcType=BIGINT}, #{auditStatus,jdbcType=VARCHAR}, #{isMarketable,jdbcType=VARCHAR}, 
-      #{brandId,jdbcType=BIGINT}, #{caption,jdbcType=VARCHAR}, #{category1Id,jdbcType=BIGINT}, 
-      #{category2Id,jdbcType=BIGINT}, #{category3Id,jdbcType=BIGINT}, #{smallPic,jdbcType=VARCHAR}, 
-      #{price,jdbcType=DECIMAL}, #{typeTemplateId,jdbcType=BIGINT}, #{isEnableSpec,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{sellerId,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR},
+      #{defaultItemId,jdbcType=BIGINT}, #{auditStatus,jdbcType=VARCHAR}, #{isMarketable,jdbcType=VARCHAR},
+      #{brandId,jdbcType=BIGINT}, #{caption,jdbcType=VARCHAR}, #{category1Id,jdbcType=BIGINT},
+      #{category2Id,jdbcType=BIGINT}, #{category3Id,jdbcType=BIGINT}, #{smallPic,jdbcType=VARCHAR},
+      #{price,jdbcType=DECIMAL}, #{typeTemplateId,jdbcType=BIGINT}, #{isEnableSpec,jdbcType=VARCHAR},
       #{isDelete,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.pinyougou.pojo.TbGoods" >
@@ -386,4 +386,8 @@
       is_delete = #{isDelete,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="countByCategoryId" resultType="int">
+    select count(1) from tb_goods where category1_id = #{categoryId} or category2_id = #{categoryId} or category3_id = #{categoryId}
+  </select>
+
 </mapper>

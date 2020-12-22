@@ -80,7 +80,6 @@ public class GoodsServiceImpl implements GoodsService {
 	 */
 	@Override
 	public void add(Goods goods) {
-
 		goods.getGoods().setAuditStatus("0");//状态：未审核
 		goodsMapper.insert(goods.getGoods());//插入商品基本信息
 

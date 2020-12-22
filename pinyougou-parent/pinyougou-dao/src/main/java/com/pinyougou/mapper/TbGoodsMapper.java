@@ -27,4 +27,6 @@ public interface TbGoodsMapper {
     int updateByPrimaryKeySelective(TbGoods record);
 
     int updateByPrimaryKey(TbGoods record);
+
+    int countByCategoryId(Long categoryId);
 }
